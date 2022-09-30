@@ -213,17 +213,17 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
       }
         UIMenuController *menuController = [UIMenuController sharedMenuController];
         NSMutableArray *menuControllerItems = [NSMutableArray arrayWithCapacity:self.menuItems.count];
-        
+
         for(NSDictionary *menuItem in self.menuItems) {
             NSString *menuItemLabel = [RCTConvert NSString:menuItem[@"label"]];
             NSString *menuItemKey = [RCTConvert NSString:menuItem[@"key"]];
             NSString *sel = [NSString stringWithFormat:@"%@%@", CUSTOM_SELECTOR, menuItemKey];
             UIMenuItem *item = [[UIMenuItem alloc] initWithTitle: menuItemLabel
                                                           action: NSSelectorFromString(sel)];
-            
+
             [menuControllerItems addObject: item];
         }
-  
+
         menuController.menuItems = menuControllerItems;
         [menuController setMenuVisible:YES animated:YES];
     }
@@ -414,6 +414,8 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
     _webView.scrollView.pagingEnabled = _pagingEnabled;
       //For UIRefreshControl to work correctly, the bounces should always be true
     _webView.scrollView.bounces = _pullToRefreshEnabled || _bounces;
+    _webView.scrollView.alwaysBounceHorizontal = _pullToRefreshEnabled || bounces;
+    _webView.scrollView.alwaysBounceVertical = _pullToRefreshEnabled || bounces;
     _webView.scrollView.showsHorizontalScrollIndicator = _showsHorizontalScrollIndicator;
     _webView.scrollView.showsVerticalScrollIndicator = _showsVerticalScrollIndicator;
     _webView.scrollView.directionalLockEnabled = _directionalLockEnabled;
@@ -675,9 +677,9 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
         }
         [_webView loadHTMLString:html baseURL:baseURL];
         return;
-    } 
+    }
     //Add cookie for subsequent resource requests sent by page itself, if cookie was set in headers on WebView
-    NSString *headerCookie = [RCTConvert NSString:_source[@"headers"][@"cookie"]]; 
+    NSString *headerCookie = [RCTConvert NSString:_source[@"headers"][@"cookie"]];
     if(headerCookie) {
       NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:headerCookie,@"Set-Cookie",nil];
       NSURL *urlString = [NSURL URLWithString:_source[@"uri"]];
@@ -1390,6 +1392,8 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
   _bounces = bounces;
     //For UIRefreshControl to work correctly, the bounces should always be true
   _webView.scrollView.bounces = _pullToRefreshEnabled || bounces;
+  _webView.scrollView.alwaysBounceHorizontal = _pullToRefreshEnabled || bounces;
+  _webView.scrollView.alwaysBounceVertical = _pullToRefreshEnabled || bounces;
 }
 #endif // !TARGET_OS_OSX
 
